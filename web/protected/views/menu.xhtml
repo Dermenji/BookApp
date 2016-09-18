@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:form id="navForm">
+             
+        <ui:param name="currentPage" value="#{facesContext.viewRoot.viewId}#{(empty request.queryString)?'':'?'.concat(request.queryString)}"/>
+
+        
+        <ul class="nav nav-list">
+           <li class="nav-header">Welcome #{request.userPrincipal.name}</li>
+           <li class="#{currentPage == '/protected/pages/bookSearch.xhtml'?'active':''}">
+               <a href="#{request.contextPath}/protected/pages/bookSearch.xhtml">Search for books</a>
+           </li>
+           
+           <li class="#{currentPage == '/protected/pages/bookRequests.xhtml?status=1'?'active':''}">
+               <a href="#{request.contextPath}/protected/pages/bookRequests.xhtml?status=1">View Pending Requests</a>
+           </li> 
+           
+           <li class="#{currentPage == '/protected/pages/bookRequests.xhtml?status=3'?'active':''}">
+               <a href="#{request.contextPath}/protected/pages/bookRequests.xhtml?status=3">View Approved Requests</a>
+           </li> 
+           
+           <li class="#{currentPage == '/protected/pages/bookRequests.xhtml?status=2'?'active':''}">
+               <a href="#{request.contextPath}/protected/pages/bookRequests.xhtml?status=2">View Rejected Requests</a>
+           </li>     
+
+           <c:if test="#{request.isUserInRole('megaAppAdmin')}">
+               <li class="#{currentPage == '/protected/pages/admin/bookAdd.xhtml'?'active':''}">
+                   <a href="#{request.contextPath}/protected/pages/admin/bookAdd.xhtml">Add a book</a>
+               </li>                
+               
+               <li class="#{currentPage == '/protected/pages/admin/userList.xhtml'?'active':''}">
+                   <a href="#{request.contextPath}/protected/pages/admin/userList.xhtml">View users</a>
+               </li> 
+           </c:if>
+
+           <li><h:commandLink action="#{logoutBacking.logout}">Logout</h:commandLink></li>
+        </ul>      
+    </h:form>
+   
+</html>

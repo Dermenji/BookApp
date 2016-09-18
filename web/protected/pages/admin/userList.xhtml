@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<ui:composition template="/WEB-INF/templates/main.xhtml"> 
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:event listener="#{userSearchBacking.retrieveUserList}" type="preRenderView"/>            
+        </f:metadata>
+    </ui:define>
+    
+    <ui:define name="menu">
+        <ui:include src="/protected/views/menu.xhtml"/>
+    </ui:define>    
+    
+    <ui:define name="content">
+        <h3>All Users</h3>        
+        <h:form id="userSearchForm">
+            <h:panelGroup id="results" class="table-responsive">
+                <h:outputText id="informationMessage" 
+                              value="#{userSearchBacking.infoMessage}" 
+                              rendered="#{userSearchBacking.infoMessage ne null}"
+                              class="informationMessage"/>
+
+                <h:dataTable value="#{userSearchBacking.userList}" 
+                             var="megaUser" class="table" 
+                             rendered="#{not empty userSearchBacking.userList}">
+
+                    <h:column>
+                        <f:facet name="header">
+                            Login Name
+                        </f:facet>
+                        #{megaUser.id}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            First Name
+                        </f:facet>
+                        #{megaUser.firstName}
+                    </h:column>  
+                    <h:column>
+                        <f:facet name="header">
+                            Last Name
+                        </f:facet>
+                        #{megaUser.lastName}
+                    </h:column> 
+                    
+                   <h:column>
+                       <f:facet name="header">
+                           Actions
+                       </f:facet>
+
+                       <h:commandLink value="Delete" action="#{userSearchBacking.deleteUser}">
+                           <f:setPropertyActionListener target="#{userSearchBacking.selectedUser}" value="#{megaUser}" />
+                           <f:ajax render="@form" />
+                       </h:commandLink>
+                   </h:column>                         
+
+                </h:dataTable> 
+
+            </h:panelGroup>
+            
+            <h:messages id="messages" class="errorMessage"/>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+</html>

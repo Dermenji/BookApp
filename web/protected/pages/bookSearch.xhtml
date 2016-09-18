@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+<ui:composition template="/WEB-INF/templates/main.xhtml"> 
+    <ui:define name="menu">
+        <ui:include src="/protected/views/menu.xhtml"/>
+    </ui:define>    
+    
+    <ui:define name="content">
+        <h3>Search for books</h3>
+        <h:form id="searchForm" class="form-search">  
+
+           <h:outputText value="Enter book title: "/>
+           <h:inputText id="searchTitle" class="search-query input-medium" 
+                        value="#{bookSearchBacking.searchTitle}" 
+                        required="true"/>&#160;
+
+           <h:commandButton value="Search for book" class="btn" action="#{bookSearchBacking.retrieveBookList}">
+               <f:ajax execute="searchTitle" render="results messages"/>
+           </h:commandButton>
+           
+           <br/><br/>
+           
+           <h:panelGroup id="results" class="table-responsive">
+               
+               <h:outputText id="informationMessage" 
+                             value="#{bookSearchBacking.infoMessage}" 
+                             rendered="#{bookSearchBacking.infoMessage ne null}"
+                             class="informationMessage"/>
+               
+               <h:dataTable value="#{bookSearchBacking.bookList}" 
+                            var="currentBook" class="table" 
+                            rendered="#{not empty bookSearchBacking.bookList}">
+                   
+                   <h:column>
+                       <f:facet name="header">
+                           ISBN
+                       </f:facet>
+                       #{currentBook.isbn}
+                   </h:column>
+                   <h:column>
+                       <f:facet name="header">
+                           Publisher
+                       </f:facet>
+                       #{currentBook.publisher}
+                   </h:column>                   
+                   <h:column>
+                       <f:facet name="header">
+                           Title
+                       </f:facet>
+                       #{currentBook.title}
+                   </h:column>   
+                   <h:column>
+                       <f:facet name="header">
+                           Actions
+                       </f:facet>
+                       
+                       <c:if test="#{request.isUserInRole('megaAppUser')}">
+                            <h:commandLink value="Request Copy" action="#{bookSearchBacking.requestBookCopy}">
+                                <f:setPropertyActionListener target="#{bookSearchBacking.selectedBook}" value="#{currentBook}" />
+                                <f:ajax render=":searchForm:results :searchForm:messages" />
+                            </h:commandLink>    
+                       </c:if>
+                       
+                       <c:if test="#{request.isUserInRole('megaAppAdmin')}">
+                           <h:commandLink value="Delete" action="#{bookSearchBacking.deleteBook}">
+                                <f:setPropertyActionListener target="#{bookSearchBacking.selectedBook}" value="#{currentBook}" />
+                                <f:ajax render=":searchForm:results :searchForm:messages" />
+                           </h:commandLink> <br/> 
+                           <h:commandLink value="Download book" action="#{bookSearchBacking.downloadBook}">
+                                <f:setPropertyActionListener target="#{bookSearchBacking.selectedBook}" value="#{currentBook}" />
+                            </h:commandLink>
+                       </c:if>
+                       
+                   </h:column>                     
+                   
+               </h:dataTable> 
+               
+           </h:panelGroup>  
+           
+           <h:messages id="messages" class="errorMessage"/>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+</html>

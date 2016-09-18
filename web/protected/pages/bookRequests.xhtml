@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<ui:composition template="/WEB-INF/templates/main.xhtml"> 
+    <ui:define name="metadata">
+        <f:metadata> 
+            <f:viewParam name="status" value="#{bookRequestsBacking.status}">
+                <f:validateLongRange minimum="1" maximum="3"/>
+            </f:viewParam>
+            
+            <f:event listener="#{bookRequestsBacking.retrieveBookRequests}" type="preRenderView"/>            
+        </f:metadata>
+    </ui:define>
+    
+    <ui:define name="menu">
+        <ui:include src="/protected/views/menu.xhtml"/>
+    </ui:define>    
+    
+    <ui:define name="content">
+        <h3>
+            <c:if test="#{bookRequestsBacking.status eq 1}">
+                Pending Requests
+            </c:if>
+            <c:if test="#{bookRequestsBacking.status eq 2}">
+                Rejected Requests
+            </c:if>
+            <c:if test="#{bookRequestsBacking.status eq 3}">
+                Approved Requests
+            </c:if>            
+        </h3>        
+        <h:form id="bookRequestForm">
+            <h:panelGroup id="results" class="table-responsive">
+                <h:outputText id="informationMessage" 
+                              value="#{bookRequestsBacking.infoMessage}" 
+                              rendered="#{bookRequestsBacking.infoMessage ne null}"
+                              class="informationMessage"/>
+
+                <h:dataTable value="#{bookRequestsBacking.bookRequestList}" 
+                             var="bookRequest" class="table" 
+                             rendered="#{not empty bookRequestsBacking.bookRequestList}">
+
+                    <h:column>
+                        <f:facet name="header">
+                            Book Title
+                        </f:facet>
+                        #{bookRequest.bookId.title}
+                    </h:column>
+                    <c:if test="#{bookRequestsBacking.status ne 1}">
+                        <h:column>
+                            <f:facet name="header">
+                                Response Time
+                            </f:facet>
+                            <h:outputText value="#{bookRequest.responseTime}">
+                                <f:converter converterId="com.jsfprohtml5.megaapp.TimeConverter"/>
+                            </h:outputText>
+                        </h:column>
+                    </c:if>                    
+                    <h:column>
+                        <f:facet name="header">
+                            Request Time
+                        </f:facet>
+                        <h:outputText value="#{bookRequest.requestTime}">
+                            <f:converter converterId="com.jsfprohtml5.megaapp.TimeConverter"/>
+                        </h:outputText>
+                    </h:column> 
+
+                    <c:if test="#{request.isUserInRole('megaAppAdmin')}">
+                        <h:column>
+                            <f:facet name="header">
+                                Request Owner
+                            </f:facet>
+                            #{bookRequest.userId.id}
+                        </h:column>
+                    </c:if>
+
+                    <h:column>
+                        <f:facet name="header">
+                            Actions
+                        </f:facet>
+
+                        <c:if test="#{request.isUserInRole('megaAppUser')}">
+                            <c:if test="#{bookRequestsBacking.status eq 1 or bookRequestsBacking.status eq 2}">
+                                NA
+                            </c:if>
+                            <c:if test="#{bookRequestsBacking.status eq 3}">
+                                <h:commandLink value="Download book" action="#{bookRequestsBacking.downloadBook}">
+                                    <f:setPropertyActionListener target="#{bookRequestsBacking.selectedBookRequest}" value="#{bookRequest}" />
+                                </h:commandLink>
+                            </c:if>                        
+                        </c:if>
+
+                        <c:if test="#{request.isUserInRole('megaAppAdmin')}">
+                            <h:commandLink value="Download book" action="#{bookRequestsBacking.downloadBook}">
+                                <f:setPropertyActionListener target="#{bookRequestsBacking.selectedBookRequest}" value="#{bookRequest}" />
+                            </h:commandLink>
+                            <c:if test="#{bookRequestsBacking.status eq 1}">
+                                <br/>
+                                <h:commandLink value="Approve request" action="#{bookRequestsBacking.approveRequest}">
+                                    <f:setPropertyActionListener target="#{bookRequestsBacking.selectedBookRequest}" value="#{bookRequest}" />
+                                    <f:ajax render=":bookRequestForm:results :bookRequestForm:messages" />
+                                </h:commandLink>
+                                <br/>
+                                <h:commandLink value="Reject request" action="#{bookRequestsBacking.rejectRequest}">
+                                    <f:setPropertyActionListener target="#{bookRequestsBacking.selectedBookRequest}" value="#{bookRequest}" />
+                                    <f:ajax render=":bookRequestForm:results :bookRequestForm:messages" />
+                                </h:commandLink>                            
+                            </c:if>                        
+                        </c:if>
+
+                    </h:column>                     
+
+                </h:dataTable> 
+
+            </h:panelGroup>
+            
+            <h:messages id="messages" class="errorMessage"/>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+</html>

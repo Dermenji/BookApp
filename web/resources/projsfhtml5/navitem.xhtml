@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite">
+
+    <cc:interface>
+        <cc:attribute name="label" type="java.lang.String" required="true"/>        
+        <cc:attribute name="value" type="java.lang.String" required="true" />                                 
+    </cc:interface>
+
+    <cc:implementation>
+        <li><a href="#{cc.attrs.value}">#{cc.attrs.label}</a></li>        
+    </cc:implementation>
+</html>

@@ -1,0 +1,32 @@
+/* 
+    Document   : megaapp
+    Created on : Oct 6, 2013, 1:04:33 AM
+    Author     : Hazem Saleh <hazems@apache.org>
+    Description:
+        Custom styles for MegaApp application.
+*/
+
+.form-center {
+    background-color: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    margin: 0 auto 20px;
+    max-width: 300px;
+    padding: 19px 29px 29px;
+}
+
+.bigErrorMessage {
+    color: red;
+    font-size: 35px;
+}
+
+.errorMessage {
+    color: red;
+    font-size: 15px;
+}
+
+.informationMessage {
+    color: green;
+    font-size: 15px;
+}

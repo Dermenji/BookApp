@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="/WEB-INF/templates/main.xhtml"> 
+    <ui:define name="menu">
+        <ui:include src="/protected/views/menu.xhtml"/>
+    </ui:define>    
+    
+    <ui:define name="content">
+        <h3>Add a new book</h3>
+        <h:form id="bookAddForm" enctype="multipart/form-data" styleClass="form-horizontal">  
+            <h:outputText id="informationMessage" 
+                          value="#{bookAddBacking.infoMessage}" 
+                          rendered="#{bookAddBacking.infoMessage ne null}"
+                          class="informationMessage"/>
+               
+            <div class="form-group">
+                <h:outputLabel value="ISBN" for="isbn"/>
+                
+                <h:inputText id="isbn" value="#{newBook.isbn}" 
+                             class="form-control" required="true">
+                    <f:passThroughAttribute name="placeHolder" value="Enter ISBN"/>
+                </h:inputText>
+                       
+            </div>     
+            <div class="form-group">
+                <h:outputLabel value="Title" for="title"/>
+                <h:inputText id="title" value="#{newBook.title}" 
+                             class="form-control" required="true">
+                    <f:passThroughAttribute name="placeHolder" value="Enter Title"/>
+                </h:inputText>                   
+            </div>
+            <div class="form-group">
+                <h:outputLabel value="Author" for="author"/>
+                <h:inputText id="author" value="#{newBook.author}" 
+                             class="form-control" required="true">
+                    <f:passThroughAttribute name="placeHolder" value="Enter Author"/>
+                </h:inputText>                   
+            </div>    
+            
+            <div class="form-group">
+                <h:outputLabel value="Publisher" for="publisher"/>
+                <h:inputText id="publisher" value="#{newBook.publisher}" 
+                             class="form-control" required="true">
+                    <f:passThroughAttribute name="placeHolder" value="Enter Publisher"/>
+                </h:inputText>                   
+            </div>            
+            
+            <div class="form-group">
+                <h:outputLabel value="Language" for="language"/>
+                <h:selectOneMenu id="language" value="#{newBook.lang}" 
+                             class="form-control" required="true">
+                    
+                    <f:selectItem itemValue="English" itemLabel="English"/>
+                    <f:selectItem itemValue="Others" itemLabel="Others"/>                    
+                </h:selectOneMenu>                   
+            </div>       
+            
+             <div class="form-group">
+                <h:outputLabel value="Content" for="content"/>
+                <h:inputFile id="content" value="#{bookAddBacking.filePart}" 
+                             class="form-control" required="true" 
+                             validator="#{bookAddBacking.validateFile}">       
+                </h:inputFile>                   
+            </div>  
+            
+            <br/>
+            <h:commandButton value="Save Book" class="btn btn-default" action="#{bookAddBacking.saveBook}">
+                <f:ajax execute="@form" render="@all"/>
+            </h:commandButton>
+            
+            <h:messages id="messages" class="errorMessage"/>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+</html>

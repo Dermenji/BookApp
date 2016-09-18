@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="/WEB-INF/templates/simple.xhtml"> 
+    
+    <ui:define name="content">
+        
+        <h:form id="registerUserForm" styleClass="form-horizontal form-center">  
+            <h3>Register</h3>
+            
+            <h:outputText id="informationMessage" 
+                         value="#{userAddBacking.infoMessage}" 
+                         rendered="#{userAddBacking.infoMessage ne null}"
+                         class="informationMessage">
+           </h:outputText>
+            
+            <div class="form-group">
+                <h:outputLabel value="Login Name" for="loginName"/>
+                
+                <h:inputText id="loginName" value="#{newUser.id}" 
+                             class="form-control" required="true">
+                    <f:passThroughAttribute name="placeHolder" value="Login Name"/>
+                </h:inputText>   
+            </div>            
+            
+            <div class="form-group">
+                <h:outputLabel value="Password" for="password"/>
+                <h:inputSecret id="password" value="#{newUser.password}" 
+                               class="form-control" required="true">
+                </h:inputSecret>                   
+            </div>    
+            
+            <div class="form-group">
+                <h:outputLabel value="Confirm password" for="password2"/>
+                <h:inputSecret id="password2" value="#{newUser.password2}" 
+                               class="form-control" required="true">
+                </h:inputSecret>                   
+            </div>            
+            
+            <div class="form-group">
+                <h:outputLabel value="First Name" for="fname"/>
+                
+                <h:inputText id="fname" value="#{newUser.firstName}" 
+                             class="form-control" required="true">
+                    <f:passThroughAttribute name="placeHolder" value="First Name"/>
+                </h:inputText>   
+            </div>     
+            
+            <div class="form-group">
+                <h:outputLabel value="Last Name" for="lname"/>
+                <h:inputText id="lname" value="#{newUser.lastName}" 
+                             class="form-control" required="true">
+                    <f:passThroughAttribute name="placeHolder" value="Last Name"/>
+                </h:inputText>                   
+            </div>            
+            
+            <br/>
+            <h:commandButton value="Register User" class="btn" action="#{userAddBacking.registerUser}">
+                <f:ajax execute="@form" render="@form"/>
+            </h:commandButton>
+            
+            <br/><br/>
+            <h:link outcome="/login.xhtml" value="Back"/>   
+            
+            <br/><br/>
+            <h:messages id="messages" class="errorMessage"/>              
+        </h:form>              
+    </ui:define>
+</ui:composition>
+</html>

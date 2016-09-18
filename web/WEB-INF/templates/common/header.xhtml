@@ -1,0 +1,15 @@
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+      xmlns:projsfhtml5="http://xmlns.jcp.org/jsf/composite/projsfhtml5">
+    
+    <ui:composition>
+        <projsfhtml5:navbar label="Mega App" value="#{request.contextPath}/protected/pages/bookSearch.xhtml">
+            <projsfhtml5:navitem label="Contact Us" value="#{request.contextPath}/public/pages/contactUs.xhtml"/>
+            <projsfhtml5:navitem label="About" value="#{request.contextPath}/public/pages/about.xhtml"/>            
+        </projsfhtml5:navbar>
+	
+        <div class="page-header">
+            <h1><ui:insert name="headerText">Welcome to the online library</ui:insert></h1>
+        </div>
+    </ui:composition>
+</html>

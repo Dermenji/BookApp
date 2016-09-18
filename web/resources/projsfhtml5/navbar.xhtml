@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://java.sun.com/jsf/composite">
+
+    <cc:interface>
+        <cc:attribute name="label" type="java.lang.String" default="Mega App" />        
+        <cc:attribute name="value" type="java.lang.String" default="#" />                         
+    </cc:interface>
+
+    <cc:implementation>
+        <div id="#{cc.clientId}" class="navbar">
+            <div class="navbar-inner">
+                <a class="brand" href="#{cc.attrs.value}">#{cc.attrs.label}</a>
+                <ul class="nav">
+                    <cc:insertChildren />
+                </ul>
+            </div>
+        </div>        
+    </cc:implementation>
+</html>
